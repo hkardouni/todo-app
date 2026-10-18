@@ -38,3 +38,27 @@ li.editing { flex-direction:column; align-items:stretch; }
 li.editing .row { margin:0 0 8px; }
 li.editing .row > * { flex:1; min-width:0; }
 .filters .grow { flex:1; min-width:140px; }
+
+/* --- توضیحات و مودال --- */
+textarea { font:inherit; color:inherit; background:var(--card); border:1px solid var(--line); border-radius:10px; padding:10px 12px; width:100%; resize:vertical; }
+li .t { cursor:pointer; }
+.preview { color:var(--muted); font-size:.82rem; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%; }
+.backdrop { position:fixed; inset:0; background:rgba(0,0,0,.5); display:flex; align-items:center; justify-content:center; padding:16px; z-index:50; }
+.modal { background:var(--card); border:1px solid var(--line); border-radius:16px; width:100%; max-width:520px; max-height:90vh; overflow:auto; padding:20px; }
+.modal-head { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; }
+.modal h2 { margin:0 0 8px; font-size:1.2rem; word-break:break-word; }
+.modal .x { border:none; background:none; font-size:1.2rem; cursor:pointer; color:var(--muted); padding:0 4px; }
+.status { display:inline-block; font-size:.78rem; padding:3px 10px; border-radius:999px; margin-bottom:12px; background:var(--bg); border:1px solid var(--line); }
+.status.ok { background:#dcfce7; border-color:#bbf7d0; color:#15803d; }
+.status.bad { background:#fee2e2; border-color:#fecaca; color:#b91c1c; }
+.desc { white-space:pre-wrap; word-break:break-word; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:12px; margin-bottom:16px; min-height:48px; }
+.desc.none { color:var(--muted); }
+.info { display:grid; grid-template-columns:auto 1fr; gap:8px 16px; margin:0 0 16px; font-size:.9rem; }
+.info dt { color:var(--muted); }
+.info dd { margin:0; }
+.modal-actions { display:flex; flex-wrap:wrap; gap:8px; }
+.modal-actions button { cursor:pointer; }
+.modal-actions .danger { margin-inline-start:auto; color:#b91c1c; }
+.modal form > * { margin-bottom:8px; }
+.modal form .row { margin-bottom:8px; }
+.modal form .row > * { flex:1; min-width:0; }

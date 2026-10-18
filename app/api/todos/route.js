@@ -11,7 +11,11 @@ export async function GET(req) {
 
   if (status === 'active') conds.push('done = false');
   if (status === 'done') conds.push('done = true');
-  if (p.get('q')) add('title ILIKE ?', `%${p.get('q')}%`);
+  if (p.get('q')) { // جستجو در عنوان و توضیحات
+    vals.push(`%${p.get('q')}%`);
+    const i = vals.length;
+    conds.push(`(title ILIKE $${i} OR description ILIKE $${i})`);
+  }
   if (p.get('category')) add('category = ?', p.get('category'));
   if (p.get('priority')) add('priority = ?', prio(p.get('priority')));
 
@@ -37,8 +41,8 @@ export async function POST(req) {
   if (!b.title?.trim()) return Response.json({ error: 'title required' }, { status: 400 });
   const sql = await db();
   const [row] = await sql.query(
-    `INSERT INTO todos (title, priority, category, due_date) VALUES ($1, $2, $3, $4::date) RETURNING ${COLS}`,
-    [b.title.trim(), prio(b.priority), b.category?.trim() || null, b.due_date || null]
+    `INSERT INTO todos (title, description, priority, category, due_date) VALUES ($1, $2, $3, $4, $5::date) RETURNING ${COLS}`,
+    [b.title.trim(), b.description?.trim() || null, prio(b.priority), b.category?.trim() || null, b.due_date || null]
   );
   return Response.json(row, { status: 201 });
 }

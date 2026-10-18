@@ -10,6 +10,7 @@ export async function PATCH(req, { params }) {
     if (!b.title?.trim()) return Response.json({ error: 'title required' }, { status: 400 });
     add('title', b.title.trim());
   }
+  if ('description' in b) add('description', b.description?.trim() || null);
   if ('priority' in b) add('priority', [1, 2, 3].includes(+b.priority) ? +b.priority : 2);
   if ('category' in b) add('category', b.category?.trim() || null);
   if ('due_date' in b) add('due_date', b.due_date || null, '::date');
