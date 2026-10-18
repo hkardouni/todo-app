@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 
 const PRIO = { 1: 'بالا', 2: 'متوسط', 3: 'پایین' };
 const today = () => new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD به وقت محلی
@@ -11,7 +11,42 @@ async function api(url, method, body) {
   return fetch(url, { method, body: body && JSON.stringify(body) });
 }
 
-function Modal({ t, startEdit, onClose, onToggle, onSave, onDelete }) {
+
+// انتخاب از دسته‌های قبلی یا تایپ دسته‌ی جدید
+function CategoryPicker({ value, onChange, cats }) {
+  const [custom, setCustom] = useState(false);
+  const ref = useRef(null);
+
+  // بعد از ذخیره، وقتی دسته‌ی جدید وارد لیست شد دوباره به حالت انتخاب برگرد
+  useEffect(() => {
+    if (custom && value && cats.includes(value) && document.activeElement !== ref.current) setCustom(false);
+  }, [cats, custom, value]);
+
+  if (custom) {
+    return (
+      <div className="catnew">
+        <input ref={ref} type="text" autoFocus placeholder="نام دسته‌بندی جدید…" value={value}
+          onChange={(e) => onChange(e.target.value)}
+          onBlur={() => { if (!value.trim() || cats.includes(value)) setCustom(false); }} />
+        <button type="button" title="انتخاب از دسته‌های قبلی" onClick={() => { setCustom(false); onChange(''); }}>↩</button>
+      </div>
+    );
+  }
+  const opts = value && !cats.includes(value) ? [...cats, value] : cats;
+  return (
+    <select value={value} title="دسته‌بندی"
+      onChange={(e) => {
+        if (e.target.value === '__new') { setCustom(true); onChange(''); }
+        else onChange(e.target.value);
+      }}>
+      <option value="">بدون دسته‌بندی</option>
+      {opts.map((c) => <option key={c} value={c}>{c}</option>)}
+      <option value="__new">➕ دسته‌بندی جدید…</option>
+    </select>
+  );
+}
+
+function Modal({ t, cats, startEdit, onClose, onToggle, onSave, onDelete }) {
   const [editing, setEditing] = useState(startEdit);
   const [d, setD] = useState({
     title: t.title, description: t.description || '', priority: String(t.priority),
@@ -45,7 +80,7 @@ function Modal({ t, startEdit, onClose, onToggle, onSave, onDelete }) {
               <select value={d.priority} onChange={ed('priority')}>
                 {Object.entries(PRIO).map(([k, v]) => <option key={k} value={k}>اولویت {v}</option>)}
               </select>
-              <input type="text" list="cats" placeholder="دسته‌بندی" value={d.category} onChange={ed('category')} />
+              <CategoryPicker cats={cats} value={d.category} onChange={(v) => setD({ ...d, category: v })} />
               <input type="date" value={d.due_date} onChange={ed('due_date')} />
             </div>
             <div className="modal-actions">
@@ -133,8 +168,6 @@ export default function Home() {
     <main>
       <h1>📝 کارهای من</h1>
 
-      <datalist id="cats">{cats.map((c) => <option key={c} value={c} />)}</datalist>
-
       <form className="add-form" onSubmit={add}>
         <div className="row">
           <input type="text" placeholder="کار جدید…" value={n.title} onChange={setNew('title')} />
@@ -145,7 +178,7 @@ export default function Home() {
           <select value={n.priority} onChange={setNew('priority')} title="اولویت">
             {Object.entries(PRIO).map(([k, v]) => <option key={k} value={k}>اولویت {v}</option>)}
           </select>
-          <input type="text" list="cats" placeholder="دسته‌بندی" value={n.category} onChange={setNew('category')} />
+          <CategoryPicker cats={cats} value={n.category} onChange={(v) => setN({ ...n, category: v })} />
           <input type="date" value={n.due_date} onChange={setNew('due_date')} title="موعد انجام" />
         </div>
       </form>
@@ -225,6 +258,7 @@ export default function Home() {
         <Modal
           key={modal.t.id}
           t={modal.t}
+          cats={cats}
           startEdit={modal.edit}
           onClose={() => setModal(null)}
           onToggle={() => toggle(modal.t)}
