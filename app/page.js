@@ -171,9 +171,9 @@ export default function Home() {
       <form className="add-form" onSubmit={add}>
         <div className="row">
           <input type="text" placeholder="کار جدید…" value={n.title} onChange={setNew('title')} />
-          <button className="primary">افزودن</button>
+          {/* <button className="primary">افزودن</button> */}
         </div>
-        <textarea rows={2} placeholder="توضیحات (اختیاری) — مثلاً شماره نامه یا هر اطلاعات اضافه" value={n.description} onChange={setNew('description')} />
+        <textarea rows={2} placeholder="توضیحات (اختیاری)" value={n.description} onChange={setNew('description')} />
         <div className="row" style={{ marginTop: 8 }}>
           <select value={n.priority} onChange={setNew('priority')} title="اولویت">
             {Object.entries(PRIO).map(([k, v]) => <option key={k} value={k}>اولویت {v}</option>)}
@@ -181,6 +181,7 @@ export default function Home() {
           <CategoryPicker cats={cats} value={n.category} onChange={(v) => setN({ ...n, category: v })} />
           <input type="date" value={n.due_date} onChange={setNew('due_date')} title="موعد انجام" />
         </div>
+        <button className="primary" style={{ width: '100%' }}>افزودن</button>
       </form>
 
       <div className="filters">
