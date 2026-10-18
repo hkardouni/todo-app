@@ -1,0 +1,40 @@
+:root { --bg:#f6f7f9; --card:#fff; --text:#1c1f24; --muted:#6b7280; --line:#e5e7eb; --accent:#4f46e5; }
+@media (prefers-color-scheme: dark) {
+  :root { --bg:#111317; --card:#1b1e24; --text:#eceef1; --muted:#9aa1ad; --line:#2b2f37; --accent:#818cf8; }
+}
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font-family:Vazirmatn,Tahoma,system-ui,sans-serif; }
+main { max-width:640px; margin:0 auto; padding:24px 16px 64px; }
+h1 { font-size:1.4rem; }
+.row { display:flex; gap:8px; margin-bottom:12px; }
+input, select, button { font:inherit; color:inherit; background:var(--card); border:1px solid var(--line); border-radius:10px; padding:10px 12px; }
+input[type=text], input[type=search] { flex:1; min-width:0; }
+button.primary { background:var(--accent); color:#fff; border-color:var(--accent); cursor:pointer; }
+.filters { display:flex; flex-wrap:wrap; gap:8px; margin:16px 0; padding:12px; background:var(--card); border:1px solid var(--line); border-radius:12px; }
+.filters label { font-size:.8rem; color:var(--muted); display:flex; flex-direction:column; gap:4px; }
+ul { list-style:none; padding:0; margin:0; }
+li { display:flex; align-items:center; gap:10px; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px; margin-bottom:8px; }
+li input[type=checkbox] { width:20px; height:20px; accent-color:var(--accent); }
+li .t { flex:1; word-break:break-word; }
+li.done .t { text-decoration:line-through; color:var(--muted); }
+li small { color:var(--muted); font-size:.75rem; display:block; }
+li .del { border:none; background:none; color:var(--muted); cursor:pointer; padding:4px 8px; }
+.empty { text-align:center; color:var(--muted); padding:32px 0; }
+
+/* --- افزوده‌ها: اولویت، دسته‌بندی، موعد، ویرایش --- */
+.add-form { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px; margin-bottom:12px; }
+.add-form .row { margin-bottom:8px; }
+.add-form .row:last-child { margin-bottom:0; }
+.add-form .row > * { flex:1; min-width:0; }
+.add-form .row > button { flex:0 0 auto; }
+li.p1 { border-inline-start:4px solid #ef4444; }
+li.p2 { border-inline-start:4px solid #f59e0b; }
+li.p3 { border-inline-start:4px solid #22c55e; }
+.meta { display:flex; flex-wrap:wrap; gap:6px; margin-top:4px; }
+.chip { font-size:.72rem; padding:2px 8px; border-radius:999px; background:var(--bg); border:1px solid var(--line); color:var(--muted); }
+.chip.overdue { background:#fee2e2; border-color:#fecaca; color:#b91c1c; }
+li .act { border:none; background:none; color:var(--muted); cursor:pointer; padding:4px 6px; }
+li.editing { flex-direction:column; align-items:stretch; }
+li.editing .row { margin:0 0 8px; }
+li.editing .row > * { flex:1; min-width:0; }
+.filters .grow { flex:1; min-width:140px; }
